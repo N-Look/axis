@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function StartPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function StartPage() {
           {/* Logo and Title */}
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <Text style={styles.logoIcon}>🛒</Text>
+              <Ionicons name="cart" size={48} color="#7B68EE" />
             </View>
             <Text style={styles.title}>Axis</Text>
             <Text style={styles.subtitle}>
@@ -80,9 +81,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
-  },
-  logoIcon: {
-    fontSize: 56,
   },
   title: {
     fontSize: 48,

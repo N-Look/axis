@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 
 const PROGRAMS = [
@@ -117,7 +118,7 @@ export default function CreateProfilePage() {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.avatarCircle}>
-              <Text style={styles.avatarIcon}>👤</Text>
+              <Ionicons name="person" size={48} color="#7B68EE" />
             </View>
             <Text style={styles.greeting}>
               Hi {profile?.first_name || firstName || 'there'}!
@@ -304,9 +305,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-  },
-  avatarIcon: {
-    fontSize: 48,
   },
   greeting: {
     fontSize: 28,

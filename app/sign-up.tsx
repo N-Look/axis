@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignUpPage() {
@@ -94,7 +95,7 @@ export default function SignUpPage() {
             {/* Logo */}
             <View style={styles.logoContainer}>
               <View style={styles.logoCircle}>
-                <Text style={styles.logoIcon}>🛒</Text>
+                <Ionicons name="cart" size={40} color="#7B68EE" />
               </View>
               <Text style={styles.title}>Axis</Text>
             </View>
@@ -229,9 +230,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-  },
-  logoIcon: {
-    fontSize: 40,
   },
   title: {
     fontSize: 32,

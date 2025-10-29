@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function VerifyEmailPage() {
@@ -60,7 +61,7 @@ export default function VerifyEmailPage() {
         <View style={styles.content}>
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <Text style={styles.logoIcon}>📧</Text>
+              <Ionicons name="mail" size={48} color="#7B68EE" />
             </View>
             <Text style={styles.title}>Check Your Email</Text>
             <Text style={styles.subtitle}>
@@ -127,9 +128,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
-  },
-  logoIcon: {
-    fontSize: 48,
   },
   title: {
     fontSize: 28,

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Dummy data for listings
@@ -39,7 +40,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Header with gradient */}
+      {/* Sticky Header with gradient */}
       <LinearGradient
         colors={['#7B68EE', '#9370DB']}
         style={styles.header}
@@ -58,13 +59,13 @@ export default function HomeScreen() {
           </View>
           
           <Pressable style={styles.notificationButton}>
-            <Text style={styles.notificationIcon}>🔔</Text>
+            <Ionicons name="notifications-outline" size={22} color="#7B68EE" />
           </Pressable>
         </View>
 
-        {/* Search Bar */}
+        {/* Compact Search Bar */}
         <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>🔍</Text>
+          <Ionicons name="search" size={18} color="#999" />
           <TextInput
             style={styles.searchInput}
             placeholder="Search here"
@@ -75,42 +76,58 @@ export default function HomeScreen() {
         </View>
       </LinearGradient>
 
-      {/* Category Filter */}
-      <View style={styles.categorySection}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoryScroll}
-        >
-          {CATEGORIES.map((category) => (
-            <Pressable
-              key={category}
-              style={[
-                styles.categoryChip,
-                selectedCategory === category && styles.categoryChipSelected,
-              ]}
-              onPress={() => setSelectedCategory(category)}
-            >
-              <View style={styles.categoryIcon}>
-                <Text style={styles.categoryIconText}>
-                  {category === 'All' ? '☰' : '📦'}
-                </Text>
-              </View>
-              <Text
-                style={[
-                  styles.categoryText,
-                  selectedCategory === category && styles.categoryTextSelected,
-                ]}
-              >
-                {category}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Listings */}
+      {/* Scrollable Content */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Category Filter with fade effect */}
+        <View style={styles.categorySection}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryScroll}
+          >
+            {CATEGORIES.map((category) => (
+              <Pressable
+                key={category}
+                style={styles.categoryChip}
+                onPress={() => setSelectedCategory(category)}
+              >
+                <View style={[
+                  styles.categoryIcon,
+                  selectedCategory === category && styles.categoryIconSelected,
+                ]}>
+                  <Ionicons 
+                    name={
+                      category === 'All' ? 'grid' :
+                      category === 'Books' ? 'book' :
+                      category === 'Electronics' ? 'laptop' :
+                      category === 'Furniture' ? 'bed' :
+                      category === 'Clothing' ? 'shirt' :
+                      'cube'
+                    } 
+                    size={22} 
+                    color={selectedCategory === category ? 'white' : '#7B68EE'} 
+                  />
+                </View>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === category && styles.categoryTextSelected,
+                  ]}
+                >
+                  {category}
+                </Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+          {/* Fade effect on right edge */}
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.categoryFade}
+            pointerEvents="none"
+          />
+        </View>
         {/* For You Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -127,7 +144,7 @@ export default function HomeScreen() {
             {filteredListings.slice(0, 3).map((listing) => (
               <Pressable key={listing.id} style={styles.listingCard}>
                 <View style={styles.listingImage}>
-                  <Text style={styles.placeholderText}>📷</Text>
+                  <Ionicons name="image-outline" size={40} color="#999" />
                 </View>
                 <Text style={styles.listingTitle}>{listing.title}</Text>
                 <Text style={styles.listingPrice}>${listing.price}</Text>
@@ -152,7 +169,7 @@ export default function HomeScreen() {
             {filteredListings.slice(3, 6).map((listing) => (
               <Pressable key={listing.id} style={styles.listingCard}>
                 <View style={styles.listingImage}>
-                  <Text style={styles.placeholderText}>📷</Text>
+                  <Ionicons name="image-outline" size={40} color="#999" />
                 </View>
                 <Text style={styles.listingTitle}>{listing.title}</Text>
                 <Text style={styles.listingPrice}>${listing.price}</Text>
@@ -164,7 +181,7 @@ export default function HomeScreen() {
 
       {/* Shopping Cart FAB */}
       <Pressable style={styles.cartFab}>
-        <Text style={styles.cartIcon}>🛒</Text>
+        <Ionicons name="cart-outline" size={28} color="#7B68EE" />
       </Pressable>
     </View>
   );
@@ -176,15 +193,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   header: {
-    paddingTop: 60,
-    paddingBottom: 20,
-    paddingHorizontal: 24,
+    paddingTop: 50,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
   },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 12,
   },
   welcomeSection: {
     flexDirection: 'row',
@@ -192,87 +209,85 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: '#7B68EE',
   },
   welcomeText: {
-    fontSize: 14,
+    fontSize: 12,
     color: 'rgba(255, 255, 255, 0.8)',
   },
   userName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: 'white',
   },
   notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  notificationIcon: {
-    fontSize: 20,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  searchIcon: {
-    fontSize: 18,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 10,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     color: '#333',
   },
   categorySection: {
     backgroundColor: 'white',
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    position: 'relative',
   },
   categoryScroll: {
-    paddingHorizontal: 24,
-    gap: 16,
+    paddingHorizontal: 20,
+    gap: 12,
+    paddingRight: 60,
+  },
+  categoryFade: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 60,
   },
   categoryChip: {
     alignItems: 'center',
-    gap: 8,
-  },
-  categoryChipSelected: {
-    opacity: 1,
+    gap: 6,
   },
   categoryIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#F5F5F5',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#E8E4F3',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  categoryIconText: {
-    fontSize: 24,
+  categoryIconSelected: {
+    backgroundColor: '#7B68EE',
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#666',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   categoryTextSelected: {
     color: '#7B68EE',
@@ -282,14 +297,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    paddingVertical: 20,
+    paddingVertical: 16,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    marginBottom: 16,
+    paddingHorizontal: 20,
+    marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 18,
@@ -302,8 +317,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   listingScroll: {
-    paddingHorizontal: 24,
-    gap: 16,
+    paddingHorizontal: 20,
+    gap: 12,
   },
   listingCard: {
     width: 120,
@@ -316,9 +331,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-  },
-  placeholderText: {
-    fontSize: 32,
   },
   listingTitle: {
     fontSize: 14,
@@ -333,8 +345,8 @@ const styles = StyleSheet.create({
   },
   cartFab: {
     position: 'absolute',
-    bottom: 80,
-    right: 24,
+    bottom: 90,
+    right: 16,
     width: 56,
     height: 56,
     borderRadius: 28,
@@ -346,8 +358,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 8,
-  },
-  cartIcon: {
-    fontSize: 24,
   },
 });
