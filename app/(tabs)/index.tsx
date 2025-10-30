@@ -1,17 +1,16 @@
-import { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  Pressable,
-  Image,
-} from 'react-native';
+import { useAuth } from '@/contexts/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from 'react-native';
 
 // Dummy data for listings
 const DUMMY_LISTINGS = [
@@ -63,9 +62,9 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        {/* Compact Search Bar */}
+        {/* Search Bar */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={18} color="#999" />
+          <Ionicons name="search" size={22} color="#999" />
           <TextInput
             style={styles.searchInput}
             placeholder="Search here"
@@ -78,7 +77,8 @@ export default function HomeScreen() {
 
       {/* Scrollable Content */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Category Filter with fade effect */}
+
+        {/* Category Filter */}
         <View style={styles.categorySection}>
           <ScrollView
             horizontal
@@ -88,26 +88,24 @@ export default function HomeScreen() {
             {CATEGORIES.map((category) => (
               <Pressable
                 key={category}
-                style={styles.categoryChip}
+                style={[
+                  styles.categoryChip,
+                  selectedCategory === category && styles.categoryChipSelected,
+                ]}
                 onPress={() => setSelectedCategory(category)}
               >
-                <View style={[
-                  styles.categoryIcon,
-                  selectedCategory === category && styles.categoryIconSelected,
-                ]}>
-                  <Ionicons 
-                    name={
-                      category === 'All' ? 'grid' :
-                      category === 'Books' ? 'book' :
-                      category === 'Electronics' ? 'laptop' :
-                      category === 'Furniture' ? 'bed' :
-                      category === 'Clothing' ? 'shirt' :
-                      'cube'
-                    } 
-                    size={22} 
-                    color={selectedCategory === category ? 'white' : '#7B68EE'} 
-                  />
-                </View>
+                <Ionicons 
+                  name={
+                    category === 'All' ? 'sparkles' :
+                    category === 'Books' ? 'book' :
+                    category === 'Electronics' ? 'laptop' :
+                    category === 'Furniture' ? 'bed' :
+                    category === 'Clothing' ? 'shirt' :
+                    'cube'
+                  } 
+                  size={18} 
+                  color={selectedCategory === category ? 'white' : '#666'} 
+                />
                 <Text
                   style={[
                     styles.categoryText,
@@ -119,14 +117,6 @@ export default function HomeScreen() {
               </Pressable>
             ))}
           </ScrollView>
-          {/* Fade effect on right edge */}
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.categoryFade}
-            pointerEvents="none"
-          />
         </View>
         {/* For You Section */}
         <View style={styles.section}>
@@ -194,14 +184,14 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 50,
-    paddingBottom: 16,
+    paddingBottom: 20,
     paddingHorizontal: 20,
   },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   welcomeSection: {
     flexDirection: 'row',
@@ -222,11 +212,11 @@ const styles = StyleSheet.create({
     color: '#7B68EE',
   },
   welcomeText: {
-    fontSize: 12,
+    fontSize: 14,
     color: 'rgba(255, 255, 255, 0.8)',
   },
   userName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
     color: 'white',
   },
@@ -242,56 +232,53 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    gap: 10,
+    borderRadius: 28,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
   },
   searchInput: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 16,
     color: '#333',
   },
   categorySection: {
-    backgroundColor: 'white',
-    paddingVertical: 16,
-    position: 'relative',
+    backgroundColor: '#F8F9FA',
+    paddingVertical: 8,
+    paddingBottom: 20,
   },
   categoryScroll: {
     paddingHorizontal: 20,
-    gap: 12,
-    paddingRight: 60,
-  },
-  categoryFade: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: 60,
+    gap: 10,
   },
   categoryChip: {
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 24,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
-  categoryIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#E8E4F3',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  categoryIconSelected: {
+  categoryChipSelected: {
     backgroundColor: '#7B68EE',
+    borderColor: '#7B68EE',
   },
   categoryText: {
-    fontSize: 11,
+    fontSize: 14,
     color: '#666',
     fontWeight: '600',
   },
   categoryTextSelected: {
-    color: '#7B68EE',
-    fontWeight: '700',
+    color: 'white',
+    fontWeight: '600',
   },
   content: {
     flex: 1,

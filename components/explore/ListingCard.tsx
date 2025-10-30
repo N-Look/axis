@@ -7,7 +7,6 @@ export interface Listing {
   price: number;
   condition: string;
   category: string;
-  location: string;
 }
 
 interface ListingCardProps {
@@ -31,9 +30,6 @@ export default function ListingCard({ listing, onPress }: ListingCardProps) {
         </View>
         <View style={styles.footer}>
           <Text style={styles.price}>${listing.price}</Text>
-          <View style={styles.locationBadge}>
-            <Ionicons name="location-outline" size={10} color="#7B68EE" />
-          </View>
         </View>
       </View>
     </Pressable>
@@ -88,13 +84,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#7B68EE',
-  },
-  locationBadge: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#E8E4F3',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

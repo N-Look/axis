@@ -16,7 +16,6 @@ export default function ActiveFilters({
   const activeFilterCount = [
     filters.category !== 'All',
     filters.condition !== 'All',
-    filters.location !== 'All',
     filters.minPrice > 0 || filters.maxPrice < 100,
   ].filter(Boolean).length;
 
@@ -39,14 +38,6 @@ export default function ActiveFilters({
           <View style={styles.filterChip}>
             <Text style={styles.filterText}>{filters.condition}</Text>
             <Pressable onPress={() => onUpdateFilters({ ...filters, condition: 'All' })}>
-              <Ionicons name="close" size={14} color="#7B68EE" />
-            </Pressable>
-          </View>
-        )}
-        {filters.location !== 'All' && (
-          <View style={styles.filterChip}>
-            <Text style={styles.filterText}>{filters.location}</Text>
-            <Pressable onPress={() => onUpdateFilters({ ...filters, location: 'All' })}>
               <Ionicons name="close" size={14} color="#7B68EE" />
             </Pressable>
           </View>

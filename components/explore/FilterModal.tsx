@@ -4,12 +4,10 @@ import Slider from '@react-native-community/slider';
 
 const CATEGORIES = ['All', 'Books', 'Electronics', 'Furniture', 'Clothing', 'Appliances', 'Other'];
 const CONDITIONS = ['All', 'Like New', 'Good', 'Fair'];
-const LOCATIONS = ['All', 'North Campus', 'South Campus', 'East Campus', 'West Campus'];
 
 export interface Filters {
   category: string;
   condition: string;
-  location: string;
   minPrice: number;
   maxPrice: number;
 }
@@ -97,32 +95,6 @@ export default function FilterModal({
                       ]}
                     >
                       {condition}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-
-            {/* Location Filter */}
-            <View style={styles.filterSection}>
-              <Text style={styles.filterSectionTitle}>Location</Text>
-              <View style={styles.filterOptions}>
-                {LOCATIONS.map((location) => (
-                  <Pressable
-                    key={location}
-                    style={[
-                      styles.filterOption,
-                      filters.location === location && styles.filterOptionSelected,
-                    ]}
-                    onPress={() => updateFilter('location', location)}
-                  >
-                    <Text
-                      style={[
-                        styles.filterOptionText,
-                        filters.location === location && styles.filterOptionTextSelected,
-                      ]}
-                    >
-                      {location}
                     </Text>
                   </Pressable>
                 ))}

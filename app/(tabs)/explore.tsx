@@ -1,31 +1,31 @@
-import { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  FlatList,
-} from 'react-native';
+import ActiveFilters from '@/components/explore/ActiveFilters';
+import FilterModal, { Filters } from '@/components/explore/FilterModal';
+import ListingCard, { Listing } from '@/components/explore/ListingCard';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from '@expo/vector-icons';
-import FilterModal, { Filters } from '@/components/explore/FilterModal';
-import ActiveFilters from '@/components/explore/ActiveFilters';
-import ListingCard, { Listing } from '@/components/explore/ListingCard';
+import { useState } from 'react';
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 // Dummy data for listings
 const DUMMY_LISTINGS: Listing[] = [
-  { id: '1', title: 'Calculus Textbook', price: 45, condition: 'Like New', category: 'Books', location: 'North Campus' },
-  { id: '2', title: 'Desk Lamp', price: 20, condition: 'Good', category: 'Furniture', location: 'South Campus' },
-  { id: '3', title: 'Winter Jacket', price: 60, condition: 'Like New', category: 'Clothing', location: 'West Campus' },
-  { id: '4', title: 'Laptop Stand', price: 35, condition: 'Fair', category: 'Electronics', location: 'North Campus' },
-  { id: '5', title: 'Biology Notes', price: 15, condition: 'Good', category: 'Books', location: 'East Campus' },
-  { id: '6', title: 'Mini Fridge', price: 80, condition: 'Like New', category: 'Appliances', location: 'South Campus' },
-  { id: '7', title: 'Chemistry Lab Coat', price: 25, condition: 'Good', category: 'Clothing', location: 'North Campus' },
-  { id: '8', title: 'Graphing Calculator', price: 50, condition: 'Like New', category: 'Electronics', location: 'West Campus' },
-  { id: '9', title: 'Office Chair', price: 70, condition: 'Fair', category: 'Furniture', location: 'East Campus' },
-  { id: '10', title: 'Physics Textbook', price: 55, condition: 'Good', category: 'Books', location: 'South Campus' },
+  { id: '1', title: 'Calculus Textbook', price: 45, condition: 'Like New', category: 'Books' },
+  { id: '2', title: 'Desk Lamp', price: 20, condition: 'Good', category: 'Furniture' },
+  { id: '3', title: 'Winter Jacket', price: 60, condition: 'Like New', category: 'Clothing' },
+  { id: '4', title: 'Laptop Stand', price: 35, condition: 'Fair', category: 'Electronics' },
+  { id: '5', title: 'Biology Notes', price: 15, condition: 'Good', category: 'Books' },
+  { id: '6', title: 'Mini Fridge', price: 80, condition: 'Like New', category: 'Appliances' },
+  { id: '7', title: 'Chemistry Lab Coat', price: 25, condition: 'Good', category: 'Clothing' },
+  { id: '8', title: 'Graphing Calculator', price: 50, condition: 'Like New', category: 'Electronics' },
+  { id: '9', title: 'Office Chair', price: 70, condition: 'Fair', category: 'Furniture' },
+  { id: '10', title: 'Physics Textbook', price: 55, condition: 'Good', category: 'Books' },
 ];
 
 export default function ExploreScreen() {
@@ -34,7 +34,6 @@ export default function ExploreScreen() {
   const [filters, setFilters] = useState<Filters>({
     category: 'All',
     condition: 'All',
-    location: 'All',
     minPrice: 0,
     maxPrice: 100,
   });
@@ -43,15 +42,13 @@ export default function ExploreScreen() {
     const matchesSearch = listing.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = filters.category === 'All' || listing.category === filters.category;
     const matchesCondition = filters.condition === 'All' || listing.condition === filters.condition;
-    const matchesLocation = filters.location === 'All' || listing.location === filters.location;
     const matchesPrice = listing.price >= filters.minPrice && listing.price <= filters.maxPrice;
-    return matchesSearch && matchesCategory && matchesCondition && matchesLocation && matchesPrice;
+    return matchesSearch && matchesCategory && matchesCondition && matchesPrice;
   });
 
   const activeFilterCount = [
     filters.category !== 'All',
     filters.condition !== 'All',
-    filters.location !== 'All',
     filters.minPrice > 0 || filters.maxPrice < 100,
   ].filter(Boolean).length;
 
@@ -59,7 +56,6 @@ export default function ExploreScreen() {
     setFilters({
       category: 'All',
       condition: 'All',
-      location: 'All',
       minPrice: 0,
       maxPrice: 100,
     });
@@ -79,36 +75,37 @@ export default function ExploreScreen() {
           <Text style={styles.headerSubtitle}>{filteredListings.length} items available</Text>
         </View>
 
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <Ionicons name="search" size={18} color="#999" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search items..."
-            placeholderTextColor="#999"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery.length > 0 && (
-            <Pressable onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={18} color="#999" />
-            </Pressable>
-          )}
-        </View>
+        {/* Search Bar with Filter Button */}
+        <View style={styles.searchRow}>
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={22} color="#999" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search items..."
+              placeholderTextColor="#999"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            {searchQuery.length > 0 && (
+              <Pressable onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={20} color="#999" />
+              </Pressable>
+            )}
+          </View>
 
-        {/* Filter Button */}
-        <Pressable 
-          style={styles.filterButton}
-          onPress={() => setShowFilters(true)}
-        >
-          <Ionicons name="options-outline" size={20} color="white" />
-          <Text style={styles.filterButtonText}>Filters</Text>
-          {activeFilterCount > 0 && (
-            <View style={styles.filterBadge}>
-              <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
-            </View>
-          )}
-        </Pressable>
+          {/* Filter Button */}
+          <Pressable 
+            style={styles.filterButton}
+            onPress={() => setShowFilters(true)}
+          >
+            <Ionicons name="options-outline" size={22} color="#7B68EE" />
+            {activeFilterCount > 0 && (
+              <View style={styles.filterBadge}>
+                <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
       </LinearGradient>
 
       {/* Active Filters Display */}
@@ -155,63 +152,78 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 50,
-    paddingBottom: 16,
+    paddingBottom: 20,
     paddingHorizontal: 20,
   },
   headerContent: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '700',
     color: 'white',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   headerSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: 'rgba(255, 255, 255, 0.8)',
   },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   searchContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    gap: 10,
-    marginBottom: 12,
+    borderRadius: 28,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    gap: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
   },
   searchInput: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 16,
     color: '#333',
   },
   filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'white',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  filterButtonText: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: '600',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
+    position: 'relative',
   },
   filterBadge: {
-    backgroundColor: 'white',
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: '#7B68EE',
     borderRadius: 10,
-    width: 20,
+    minWidth: 20,
     height: 20,
+    paddingHorizontal: 6,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   filterBadgeText: {
-    color: '#7B68EE',
-    fontSize: 12,
+    color: 'white',
+    fontSize: 11,
     fontWeight: '700',
   },
   listingsContainer: {
